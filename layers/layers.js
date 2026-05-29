@@ -36,11 +36,9 @@ var lyr_NaturesReserves_2 = new ol.layer.Vector({
                 popuplayertitle: 'Natures Reserves',
                 interactive: true,
     title: 'Natures Reserves<br />\
-    <img src="styles/legend/NaturesReserves_2_0.png" /> Nature Scot<br />\
-    <img src="styles/legend/NaturesReserves_2_1.png" /> RSPB<br />\
-    <img src="styles/legend/NaturesReserves_2_2.png" /> Scottish Wildlife Trust<br />\
-    <img src="styles/legend/NaturesReserves_2_3.png" /> Trees for Life<br />\
-    <img src="styles/legend/NaturesReserves_2_4.png" /> Other<br />' });
+    <img src="styles/legend/NaturesReserves_2_0.png" /> No<br />\
+    <img src="styles/legend/NaturesReserves_2_1.png" /> Yes<br />\
+    <img src="styles/legend/NaturesReserves_2_2.png" /> <br />' });
 
 lyr_OSMStandard_0.setVisible(true);lyr_GoogleSatelliteHybrid_1.setVisible(true);lyr_NaturesReserves_2.setVisible(true);
 var layersList = [lyr_OSMStandard_0,lyr_GoogleSatelliteHybrid_1,lyr_NaturesReserves_2];

@@ -4,7 +4,7 @@ function categories_NaturesReserves_2(feature, value, size, resolution, labelTex
                        labelFont, labelFill, bufferColor, bufferWidth,
                        placement) {
                 var valueStr = (value !== null && value !== undefined) ? value.toString() : 'default';
-                switch(valueStr) {case 'Nature Scot':
+                switch(valueStr) {case 'No':
                     return [ new ol.style.Style({
         image: new ol.style.Icon({
                   imgSize: [580, 580],
@@ -20,7 +20,7 @@ function categories_NaturesReserves_2(feature, value, size, resolution, labelTex
                               bufferWidth)
     })];
                     break;
-case 'RSPB':
+case 'Yes':
                     return [ new ol.style.Style({
         image: new ol.style.Icon({
                   imgSize: [580, 580],
@@ -36,7 +36,7 @@ case 'RSPB':
                               bufferWidth)
     })];
                     break;
-case 'Scottish Wildlife Trust':
+default:
                     return [ new ol.style.Style({
         image: new ol.style.Icon({
                   imgSize: [580, 580],
@@ -51,38 +51,6 @@ case 'Scottish Wildlife Trust':
                               labelFill, placement, bufferColor,
                               bufferWidth)
     })];
-                    break;
-case 'Trees for Life':
-                    return [ new ol.style.Style({
-        image: new ol.style.Icon({
-                  imgSize: [580, 580],
-                  scale: 0.04310344827586207,
-                  anchor: [290.0, 290.0],
-                  anchorXUnits: "pixels",
-                  anchorYUnits: "pixels",
-                  rotation: 0.0,
-                  src: "styles/landuse_deciduous_3.svg"
-            }),
-        text: createTextStyle(feature, resolution, labelText, labelFont,
-                              labelFill, placement, bufferColor,
-                              bufferWidth)
-    })];
-                    break;
-default:
-                    return [ new ol.style.Style({
-        image: new ol.style.Icon({
-                  imgSize: [580, 580],
-                  scale: 0.04310344827586207,
-                  anchor: [290.0, 290.0],
-                  anchorXUnits: "pixels",
-                  anchorYUnits: "pixels",
-                  rotation: 0.0,
-                  src: "styles/landuse_deciduous_4.svg"
-            }),
-        text: createTextStyle(feature, resolution, labelText, labelFont,
-                              labelFill, placement, bufferColor,
-                              bufferWidth)
-    })];
                     break;}};
 
 var style_NaturesReserves_2 = function(feature, resolution){
@@ -92,7 +60,7 @@ var style_NaturesReserves_2 = function(feature, resolution){
     };
     
     var labelText = ""; 
-    var value = feature.get("Managed by");
+    var value = feature.get("VisitorCen");
     var labelFont = "10px, sans-serif";
     var labelFill = "#000000";
     var bufferColor = "";
