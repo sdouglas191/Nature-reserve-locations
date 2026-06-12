@@ -139,7 +139,7 @@
         
             <label>
                 Toilets:
-                <select id="Toilets">
+                <select id="toiletFilter">
                     <option value="all">All</option>
                     <option value="yes">With Car Park</option>
                     <option value="no">No Car Park</option>
@@ -253,72 +253,75 @@
         <script src="./resources/qgis2web.js"></script>   
 
         <script>
+        
             let visitorFilter = "all";
             let toiletFilter = "all";
             
-            // wait for map/layers to load
-            setTimeout(() => {
+            function waitForMapReady(callback) {
+                const check = setInterval(() => {
             
-                const visitorSelect = document.getElementById("visitorFilter");
-                const toiletSelect = document.getElementById("toiletFilter");
+                    if (typeof map !== "undefined") {
             
-                visitorSelect.addEventListener("change", function() {
-                    visitorFilter = this.value;
-                    applyFilters();
-                });
+                        const layers = map.getLayers().getArray();
             
-                carSelect.addEventListener("change", function() {
-                    toiletFilter = this.value;
-                    applyFilters();
-                });
+                        const targetLayer = layers.find(l =>
+                            l && l.getSource && l.getSource().getFeatures
+                        );
             
-            }, 1000);
-            
-            
-            // CORE FILTER FUNCTION
-            function applyFilters() {
-            
-                // THIS depends on your layer variable name:
-                // qgis2web usually creates: layer_NaturesReserves_2
-            
-                const layer = layer_NaturesReserves_2;
-            
-                layer.getSource().changed();
-            
-                layer.setStyle(function(feature) {
-            
-                    const hasVisitor = feature.get("VisitorCen");
-                    const hasCar = feature.get("Toilets");
-            
-                    // normalize values
-                    const v = String(hasVisitor).toLowerCase();
-                    const c = String(hasCar).toLowerCase();
-            
-                    // FILTER LOGIC
-            
-                    if (visitorFilter !== "all") {
-                        if (visitorFilter === "yes" && v !== "yes" && v !== "true" && v !== "1") {
-                            return null;
-                        }
-                        if (visitorFilter === "no" && (v === "yes" || v === "true" || v === "1")) {
-                            return null;
+                        if (targetLayer) {
+                            clearInterval(check);
+                            callback(targetLayer);
                         }
                     }
             
-                    if (toiletFilter !== "all") {
-                        if (toiletFilter === "yes" && c !== "yes" && c !== "true" && c !== "1") {
-                            return null;
-                        }
-                        if (toiletFilter === "no" && (c === "yes" || c === "true" || c === "1")) {
-                            return null;
-                        }
-                    }
-            
-                    // return default style from qgis2web
-                    return feature.getStyle ? feature.getStyle() : undefined;
-                });
-            
+                }, 300);
             }
+            
+            waitForMapReady((layer) => {
+            
+                const source = layer.getSource();
+            
+                // UI events (FIXED IDS)
+                document.getElementById("visitorFilter").addEventListener("change", function () {
+                    visitorFilter = this.value;
+                    source.changed();
+                });
+            
+                document.getElementById("toiletFilter").addEventListener("change", function () {
+                    toiletFilter = this.value;
+                    source.changed();
+                });
+            
+                const baseStyle = layer.getStyle();
+            
+                layer.setStyle(function (feature) {
+            
+                    const v = String(feature.get("VisitorCen") || "").toLowerCase();
+                    const c = String(feature.get("Toilets") || "").toLowerCase();
+            
+                    // Visitor Centre filter
+                    if (visitorFilter === "yes") {
+                        if (!(v === "yes" || v === "true" || v === "1")) return null;
+                    }
+            
+                    if (visitorFilter === "no") {
+                        if (v === "yes" || v === "true" || v === "1") return null;
+                    }
+            
+                    // Toilets filter
+                    if (toiletFilter === "yes") {
+                        if (!(c === "yes" || c === "true" || c === "1")) return null;
+                    }
+            
+                    if (toiletFilter === "no") {
+                        if (c === "yes" || c === "true" || c === "1") return null;
+                    }
+            
+                    return baseStyle ? baseStyle(feature) : undefined;
+                });
+            
+            });
+        
         </script>
         
     </body>
