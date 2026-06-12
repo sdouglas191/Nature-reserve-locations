@@ -170,23 +170,95 @@
                     background:#ffdd57;
                     font-weight:600;
                 }
+
+            #toolbar{
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                
+                    padding:10px 16px;
+                    background:#1f2937;
+                    color:white;
+                
+                    position:sticky;
+                    top:0;
+                    z-index:999;
+                }
+                
+                .tool-group{
+                    display:flex;
+                    gap:20px;
+                }
+                
+                .tool-group label{
+                    display:flex;
+                    align-items:center;
+                    gap:6px;
+                    font-size:14px;
+                    cursor:pointer;
+                }
+                
+                #toolbar input{
+                    transform:scale(1.2);
+                }
+                
+                #resetFilters{
+                    background:#3b82f6;
+                    border:none;
+                    color:white;
+                    padding:6px 12px;
+                    border-radius:6px;
+                    cursor:pointer;
+                }
+                
+                #resetFilters:hover{
+                    background:#2563eb;
+                }
+
+                #sidebar{
+                    position:fixed;
+                    right:0;
+                    top:50px;
+                    width:220px;
+                    height:100%;
+                    background:white;
+                    padding:15px;
+                
+                    box-shadow:-2px 0 10px rgba(0,0,0,0.1);
+                
+                    font-size:13px;
+                }
+                
+                #sidebar h3{
+                    margin-top:10px;
+                }
+                
+                @media(max-width:800px){
+                    #sidebar{
+                        display:none;
+                    }
+                }
             
         </style>
         <title></title>
     </head>
     <body>
 
-        <div id="filters">
+        <div id="toolbar">
 
-            <label class="filter-item">
-                <input type="checkbox" id="filterVisitor">
-                Visitor Centre
-            </label>
+            <div class="tool-group">
+                <label>
+                    <input type="checkbox" id="filterVisitor">
+                    Visitor Centre
+                </label>
         
-            <label class="filter-item">
-                <input type="checkbox" id="filterToilets">
-                Toilets
-            </label>
+                <label>
+                    <input type="checkbox" id="filterToilets">
+                    Toilets
+                </label>
+            </div>
+        
+            <button id="resetFilters">Reset</button>
         
         </div>
         
@@ -195,6 +267,23 @@
                 <a href="#" id="popup-closer" class="ol-popup-closer"></a>
                 <div id="popup-content"></div>
             </div>
+        </div>
+
+        <div id="sidebar">
+
+            <h3>Legend</h3>
+        
+            <p>🟢 Accessible reserve</p>
+            <p>🏠 Visitor centre available</p>
+            <p>🚻 Toilets available</p>
+        
+            <hr>
+        
+            <h3>About</h3>
+            <p>
+                UK nature reserves dataset visualised using QGIS + OpenLayers.
+            </p>
+        
         </div>
      
     <div id="hero">
@@ -235,7 +324,7 @@
         <script src="./resources/qgis2web.js"></script>   
 
 
-        <script>
+       <script>
 
             function waitForMapReady(callback) {
                 const check = setInterval(() => {
@@ -263,9 +352,20 @@
             
                 const visitorBox = document.getElementById("filterVisitor");
                 const toiletBox = document.getElementById("filterToilets");
+                const resetBtn = document.getElementById("resetFilters");
             
-                visitorBox.addEventListener("change", () => source.changed());
-                toiletBox.addEventListener("change", () => source.changed());
+                function refresh() {
+                    source.changed();
+                }
+            
+                visitorBox.addEventListener("change", refresh);
+                toiletBox.addEventListener("change", refresh);
+            
+                resetBtn.addEventListener("click", () => {
+                    visitorBox.checked = false;
+                    toiletBox.checked = false;
+                    refresh();
+                });
             
                 const baseStyle = layer.getStyle();
             
@@ -276,8 +376,6 @@
             
                     const hasVisitor = (v === "yes" || v === "true" || v === "1");
                     const hasToilets = (t === "yes" || t === "true" || t === "1");
-            
-                    // FILTER RULES (checkbox logic)
             
                     if (visitorBox.checked && !hasVisitor) return null;
                     if (toiletBox.checked && !hasToilets) return null;
