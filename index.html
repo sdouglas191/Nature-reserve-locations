@@ -173,10 +173,11 @@
 
             #toolbar{
                     display:flex;
-                    justify-content:space-between;
+                    justify-content:center;
                     align-items:center;
+                    gap:20px;
                 
-                    padding:10px 16px;
+                    padding:8px 12px;
                     background:#1f2937;
                     color:white;
                 
@@ -187,56 +188,45 @@
                 
                 .tool-group{
                     display:flex;
-                    gap:20px;
+                    gap:18px;
+                    align-items:center;
                 }
                 
                 .tool-group label{
                     display:flex;
                     align-items:center;
                     gap:6px;
-                    font-size:14px;
+                    font-size:13px;
                     cursor:pointer;
+                    white-space:nowrap;
                 }
                 
                 #toolbar input{
-                    transform:scale(1.2);
+                    transform:scale(1.1);
                 }
                 
                 #resetFilters{
-                    background:#3b82f6;
+                    width:28px;
+                    height:28px;
+                
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                
                     border:none;
-                    color:white;
-                    padding:6px 12px;
                     border-radius:6px;
+                
+                    background:#3b82f6;
+                    color:white;
+                
+                    font-size:16px;
+                    line-height:1;
+                
                     cursor:pointer;
                 }
                 
                 #resetFilters:hover{
                     background:#2563eb;
-                }
-
-                #sidebar{
-                    position:fixed;
-                    right:0;
-                    top:50px;
-                    width:220px;
-                    height:100%;
-                    background:white;
-                    padding:15px;
-                
-                    box-shadow:-2px 0 10px rgba(0,0,0,0.1);
-                
-                    font-size:13px;
-                }
-                
-                #sidebar h3{
-                    margin-top:10px;
-                }
-                
-                @media(max-width:800px){
-                    #sidebar{
-                        display:none;
-                    }
                 }
             
         </style>
@@ -258,7 +248,7 @@
                 </label>
             </div>
         
-            <button id="resetFilters">Reset</button>
+            <button id="resetFilters" title="Reset filters">↺</button>
         
         </div>
         
@@ -267,23 +257,6 @@
                 <a href="#" id="popup-closer" class="ol-popup-closer"></a>
                 <div id="popup-content"></div>
             </div>
-        </div>
-
-        <div id="sidebar">
-
-            <h3>Legend</h3>
-        
-            <p>🟢 Accessible reserve</p>
-            <p>🏠 Visitor centre available</p>
-            <p>🚻 Toilets available</p>
-        
-            <hr>
-        
-            <h3>About</h3>
-            <p>
-                UK nature reserves dataset visualised using QGIS + OpenLayers.
-            </p>
-        
         </div>
      
     <div id="hero">
@@ -301,7 +274,7 @@
         
         <a href="https://www.buymeacoffee.com/sdgeo" target="_blank">
             <button>
-                ☕ Support this project - buy Me a Coffee ☕
+                ☕ Support this project - buy me a coffee ☕
             </button>
         </a>
         
