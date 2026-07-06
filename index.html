@@ -11,47 +11,279 @@
         <link href="resources/photon-geocoder-autocomplete.min.css" rel="stylesheet">
         <link rel="stylesheet" href="./resources/ol-layerswitcher.css">
         <link rel="stylesheet" href="./resources/qgis2web.css">
+        
         <style>
-        html, body {
-            background-color: #ffffff;
-        }
-        .ol-control > * {
-            background-color: #f8f8f8!important;
-            color: #444444!important;
-            border-radius: 0px;
-        }
-        .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
-            color: #444444!important;
-        }
-        .search-layer-input-search {
-            background-color: #f8f8f8!important;
-        }
-        .ol-control > *:focus, .ol-control >*:hover {
-            background-color: rgba(248, 248, 248, 0.7)!important;
-        } 
-        .ol-control {
-            background-color: rgba(255,255,255,.4) !important;
-            padding: 2px !important;
-        } 
+            html, body {
+                background-color: #ffffff;
+            }
+            .ol-control > * {
+                background-color: #f8f8f8!important;
+                color: #444444!important;
+                border-radius: 0px;
+            }
+            .ol-attribution a, .gcd-gl-input::placeholder, .search-layer-input-search::placeholder {
+                color: #444444!important;
+            }
+            .search-layer-input-search {
+                background-color: #f8f8f8!important;
+            }
+            .ol-control > *:focus, .ol-control >*:hover {
+                background-color: rgba(248, 248, 248, 0.7)!important;
+            } 
+            .ol-control {
+                background-color: rgba(255,255,255,.4) !important;
+                padding: 2px !important;
+            } 
         </style>
 
         <style>
-        html, body, #map {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            margin: 0;
-        }
+
+            html,body{
+            
+            margin:0;
+            padding:0;
+            font-family:Arial,sans-serif;
+            background:#f5f5f5;
+            
+            }
+            
+            #map{
+            
+            width:100%;
+            height:75vh;
+            
+            }
+            
+            #info{
+            
+            display:grid;
+            grid-template-columns:1fr 1fr 1fr;
+            gap:20px;
+            
+            padding:20px;
+            
+            background:white;
+            
+            }
+            
+            .panel{
+            
+            padding:20px;
+            
+            border-radius:10px;
+            
+            box-shadow:0 2px 8px rgba(0,0,0,.15);
+            
+            }
+            
+            input,
+            textarea{
+            
+            width:100%;
+            padding:10px;
+            margin-top:10px;
+            margin-bottom:10px;
+            
+            }
+            
+            button{
+            
+            padding:10px;
+            width:100%;
+            
+            }
+            
+            @media(max-width:800px){
+            
+            #info{
+            
+            grid-template-columns:1fr;
+            
+            }
+            
+            }
+
+            #filters{
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                gap:30px;
+            
+                padding:12px 20px;
+                background:white;
+            
+                box-shadow:0 2px 10px rgba(0,0,0,0.08);
+            
+                position:sticky;
+                top:0;
+                z-index:999;
+            }
+            
+            .filter-item{
+                font-size:14px;
+                font-weight:500;
+                display:flex;
+                align-items:center;
+                gap:8px;
+                cursor:pointer;
+            }
+            
+            #filters input{
+                transform:scale(1.2);
+                cursor:pointer;
+            }
+
+
+            #hero{
+                    max-width:700px;
+                    margin:25px auto 10px auto;
+                    padding:20px 25px;
+                
+                    background:white;
+                    border-radius:12px;
+                
+                    box-shadow:0 2px 12px rgba(0,0,0,0.08);
+                
+                    text-align:center;
+                }
+                
+            #hero h1{
+                    margin:0;
+                    font-size:22px;
+                }
+                
+            #hero p{
+                    margin-top:10px;
+                    color:#555;
+                }
+                
+            #coffee{
+                    text-align:center;
+                    margin:10px auto 25px auto;
+                }
+                
+            #coffee button{
+                    padding:10px 18px;
+                    border:none;
+                    border-radius:8px;
+                    cursor:pointer;
+                    background:#ffdd57;
+                    font-weight:600;
+                }
+
+            #toolbar{
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    gap:20px;
+                
+                    padding:8px 12px;
+                    background:#1f2937;
+                    color:white;
+                
+                    position:sticky;
+                    top:0;
+                    z-index:999;
+                }
+                
+                .tool-group{
+                    display:flex;
+                    gap:18px;
+                    align-items:center;
+                }
+                
+                .tool-group label{
+                    display:flex;
+                    align-items:center;
+                    gap:6px;
+                    font-size:13px;
+                    cursor:pointer;
+                    white-space:nowrap;
+                }
+                
+                #toolbar input{
+                    transform:scale(1.1);
+                }
+                
+                #resetFilters{
+                    width:28px;
+                    height:28px;
+                
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                
+                    border:none;
+                    border-radius:6px;
+                
+                    background:#3b82f6;
+                    color:white;
+                
+                    font-size:16px;
+                    line-height:1;
+                
+                    cursor:pointer;
+                }
+                
+                #resetFilters:hover{
+                    background:#2563eb;
+                }
+            
         </style>
         <title></title>
     </head>
     <body>
+
+        <div id="toolbar">
+
+            <div class="tool-group">
+                <label>
+                    <input type="checkbox" id="filterVisitor">
+                    Visitor Centre
+                </label>
+        
+                <label>
+                    <input type="checkbox" id="filterToilets">
+                    Toilets
+                </label>
+            </div>
+        
+            <button id="resetFilters" title="Reset filters">↺</button>
+        
+        </div>
+        
         <div id="map">
             <div id="popup" class="ol-popup">
                 <a href="#" id="popup-closer" class="ol-popup-closer"></a>
                 <div id="popup-content"></div>
             </div>
         </div>
+     
+    <div id="hero">
+
+        <h1>Nature reserves across the UK</h1>
+    
+        <p>
+            Helping you explore protected areas and natural spaces across the UK.
+        </p>
+
+    </div>
+      
+
+    <div id="coffee">
+        
+        <a href="https://www.buymeacoffee.com/sdgeo" target="_blank">
+            <button>
+                ☕ Support this project - buy me a coffee ☕
+            </button>
+        </a>
+        
+    </div>
+
+
+
+
+        
         <script src="resources/qgis2web_expressions.js"></script>
         <script src="./resources/functions.js"></script>
         <script src="./resources/ol.js"></script>
@@ -62,6 +294,71 @@
         <script src="styles/NaturesReserves_2_style.js"></script>
         <script src="./layers/layers.js" type="text/javascript"></script> 
         <script src="./resources/Autolinker.min.js"></script>
-        <script src="./resources/qgis2web.js"></script>        
+        <script src="./resources/qgis2web.js"></script>   
+
+
+       <script>
+
+            function waitForMapReady(callback) {
+                const check = setInterval(() => {
+            
+                    if (typeof map !== "undefined") {
+            
+                        const layers = map.getLayers().getArray();
+            
+                        const targetLayer = layers.find(l =>
+                            l && l.getSource && l.getSource().getFeatures
+                        );
+            
+                        if (targetLayer) {
+                            clearInterval(check);
+                            callback(targetLayer);
+                        }
+                    }
+            
+                }, 300);
+            }
+            
+            waitForMapReady((layer) => {
+            
+                const source = layer.getSource();
+            
+                const visitorBox = document.getElementById("filterVisitor");
+                const toiletBox = document.getElementById("filterToilets");
+                const resetBtn = document.getElementById("resetFilters");
+            
+                function refresh() {
+                    source.changed();
+                }
+            
+                visitorBox.addEventListener("change", refresh);
+                toiletBox.addEventListener("change", refresh);
+            
+                resetBtn.addEventListener("click", () => {
+                    visitorBox.checked = false;
+                    toiletBox.checked = false;
+                    refresh();
+                });
+            
+                const baseStyle = layer.getStyle();
+            
+                layer.setStyle(function (feature) {
+            
+                    const v = String(feature.get("VisitorCen") || "").toLowerCase();
+                    const t = String(feature.get("Toilets") || "").toLowerCase();
+            
+                    const hasVisitor = (v === "yes" || v === "true" || v === "1");
+                    const hasToilets = (t === "yes" || t === "true" || t === "1");
+            
+                    if (visitorBox.checked && !hasVisitor) return null;
+                    if (toiletBox.checked && !hasToilets) return null;
+            
+                    return baseStyle ? baseStyle(feature) : undefined;
+                });
+            
+            });
+            
+            </script>
+        
     </body>
 </html>
